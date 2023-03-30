@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Mar 16 12:44:25 2023
+
+@author: gonzalodes
+"""
+
+class FF:
+    
+    def __init__(self, flujos, tasa, momento):
+        self.flujos = flujos
+        self.tasa = tasa
+        self.momento = momento
+    
+    def VAN(self):
+        f = self.flujos
+        t = self.tasa
+        m = self.momento
+        van = 0
+        if f.index(f[m])>=0:
+            for i in f[m:]:
+                x = int(i)/((1+t)**(f[m:].index(i)+1))
+                van+=x
+            return van
+        else:
+            raise ValueError("El momento se exede del numero de periodos")
+        
+    def VF(self):
+        f = self.flujos
+        t = self.tasa
+        vf = 0
+        m = self.momento
+        if f.index(f[m])>=0:
+            for i in f[:m]:
+                x = int(i)*((1+t)**(len(f[:m])-f[:m].index(i)))
+                vf+=x
+            return vf
+        else:
+            raise ValueError("El momento se exede del numero de periodos")
+            
+X =FF([1300, 1500, 2000], 0.12, 1)
+
+print(f"El valor futuro del FF descontado es de {X.VF()}")
+print(f"\nEl VAN del FF descontado es de {X.VAN()}")
+print(f"\nEl Valor total del FF es de {X.VAN()+X.VF()}")
